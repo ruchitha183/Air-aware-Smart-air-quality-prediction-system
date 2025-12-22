@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Share2, Download } from 'lucide-react';
+import { getHealthInfo } from "../utils/healthInfo"; // ✅ shared health logic
 
 const ExportShare = ({ dashboardId, location, aqi }) => {
   const [loading, setLoading] = useState(false);
@@ -9,7 +10,7 @@ const ExportShare = ({ dashboardId, location, aqi }) => {
   const [shareRendered, setShareRendered] = useState(false);
   const shareRef = useRef(null);
 
-  // Handle click outside
+  // 🔹 Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (shareRef.current && !shareRef.current.contains(event.target)) {
@@ -20,15 +21,16 @@ const ExportShare = ({ dashboardId, location, aqi }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Delay unmount for fade-out
+  // 🔹 Smooth fade-in/fade-out
   useEffect(() => {
     if (shareVisible) setShareRendered(true);
     else {
-      const timer = setTimeout(() => setShareRendered(false), 200); // match transition duration
+      const timer = setTimeout(() => setShareRendered(false), 200);
       return () => clearTimeout(timer);
     }
   }, [shareVisible]);
 
+  // 🔹 Export dashboard as PDF
   const handleExportPDF = async () => {
     setLoading(true);
     const element = document.getElementById(dashboardId);
@@ -56,28 +58,52 @@ const ExportShare = ({ dashboardId, location, aqi }) => {
     }
   };
 
+  // 🔹 Build share message including health info
+  const buildShareMessage = () => {
+    const health = getHealthInfo(aqi);
+
+    return `
+🌫 Air Quality Update
+
+📍 Location: ${location}
+📊 AQI: ${aqi} (${health.category})
+
+⚠ Health Recommendation:
+${health.recommendation}
+
+🛡 Precautions:
+${health.precaution}
+
+Stay safe 🌱
+`;
+  };
+
+  // 🔹 Share handlers
   const shareWhatsApp = () => {
-    const message = `Check out the AQI for ${location}: ${aqi}`;
+    const message = buildShareMessage();
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
     setShareVisible(false);
   };
 
   const shareTwitter = () => {
-    const message = `AQI Dashboard for ${location}: ${aqi}`;
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`, '_blank');
+    const message = buildShareMessage();
+    window.open(
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`,
+      '_blank'
+    );
     setShareVisible(false);
   };
 
   const shareEmail = () => {
-    const subject = `AQI Dashboard for ${location}`;
-    const body = `Current AQI for ${location} is ${aqi}.`;
+    const subject = `Air Quality Alert for ${location}`;
+    const body = buildShareMessage();
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setShareVisible(false);
   };
 
   return (
     <div className="flex items-center gap-3">
-      {/* Share button with fade-in/fade-out dropdown */}
+      {/* 🔹 Share button */}
       <div className="relative" ref={shareRef}>
         <button
           onClick={() => setShareVisible(!shareVisible)}
@@ -89,28 +115,28 @@ const ExportShare = ({ dashboardId, location, aqi }) => {
 
         {shareRendered && (
           <div
-            className={`absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex flex-col gap-2 p-3 z-50
+            className={`absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 rounded-lg shadow-lg flex flex-col gap-2 p-3 z-50
               transition-opacity duration-200
               ${shareVisible ? 'opacity-100' : 'opacity-0'}
             `}
           >
             <button
               onClick={shareWhatsApp}
-              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
             >
               WhatsApp
             </button>
 
             <button
               onClick={shareTwitter}
-              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
             >
               Twitter
             </button>
 
             <button
               onClick={shareEmail}
-              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              className="px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
             >
               Email
             </button>
@@ -118,7 +144,7 @@ const ExportShare = ({ dashboardId, location, aqi }) => {
         )}
       </div>
 
-      {/* Download PDF button */}
+      {/* 🔹 Download PDF */}
       <button
         onClick={handleExportPDF}
         className="flex items-center gap-2 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow"
