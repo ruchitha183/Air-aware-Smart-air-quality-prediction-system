@@ -3,6 +3,8 @@ import { ThemeContext } from "../context/ThemeContext";
 import { SunIcon, MoonIcon, PowerIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import ExportShare from "./ExportShare";
 import { useNavigate } from "react-router-dom";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
 
 const Header = ({ title, location, aqi }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -43,6 +45,16 @@ const Header = ({ title, location, aqi }) => {
         >
           <InformationCircleIcon className="h-6 w-6" />
         </button>
+
+        {/* Profile */}
+        <Link
+          to="/profile"
+          className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow"
+          title="Profile"
+        >
+          <UserCircleIcon className="h-7 w-7 text-gray-800 dark:text-white" />
+        </Link>
+
 
         {/* Theme Toggle */}
         <button
