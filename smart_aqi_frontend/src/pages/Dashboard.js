@@ -14,63 +14,48 @@ import { fetchCurrentAQI, fetchPredictionAQI } from "../utils/api";
 
 /* ✅ ALL INDIA – MAJOR CITIES */
 const locations = [
-  // Metro Cities
-  "Delhi",
-  "Mumbai",
-  "Bengaluru",
-  "Chennai",
-  "Kolkata",
-  "Hyderabad",
-  "Pune",
   "Ahmedabad",
-
-  // Andhra Pradesh
-  "Visakhapatnam",
-  "Vijayawada",
-  "Guntur",
-  "Nellore",
-  "Kurnool",
-  "Rajahmundry",
-  "Kakinada",
-  "Tirupati",
-
-  // Telangana
-  "Warangal",
-  "Nizamabad",
-  "Karimnagar",
-
-  // Tamil Nadu
+  "Aurangabad",
+  "Bengaluru",
+  "Bhopal",
+  "Bhubaneswar",
+  "Chennai",
   "Coimbatore",
-  "Madurai",
-  "Salem",
-
-  // Karnataka
-  "Mysuru",
-  "Mangaluru",
+  "Cuttack",
+  "Delhi",
+  "Guntur",
+  "Guwahati",
   "Hubballi",
-
-  // Maharashtra
+  "Hyderabad",
+  "Indore",
+  "Jaipur",
+  "Kakinada",
+  "Kanpur",
+  "Karimnagar",
+  "Kochi",
+  "Kolkata",
+  "Kozhikode",
+  "Kurnool",
+  "Lucknow",
+  "Madurai",
+  "Mangaluru",
+  "Mumbai",
+  "Mysuru",
   "Nagpur",
   "Nashik",
-  "Aurangabad",
-
-  // Kerala
-  "Kochi",
-  "Thiruvananthapuram",
-  "Kozhikode",
-
-  // Others
-  "Jaipur",
-  "Lucknow",
-  "Kanpur",
-  "Indore",
-  "Bhopal",
+  "Nellore",
+  "Nizamabad",
   "Patna",
+  "Pune",
+  "Rajahmundry",
   "Ranchi",
-  "Bhubaneswar",
-  "Cuttack",
-  "Guwahati",
+  "Salem",
   "Shillong",
+  "Thiruvananthapuram",
+  "Tirupati",
+  "Vijayawada",
+  "Visakhapatnam",
+  "Warangal"
 ];
 
 const Dashboard = () => {
